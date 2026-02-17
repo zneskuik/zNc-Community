@@ -812,7 +812,9 @@
                     
                     const avatarEl = document.getElementById('userAvatar');
                     
+                    // Avatar yükle
                     if(userData.avatar && userData.avatar.color && userData.avatar.value) {
+                        console.log("Avatar bulundu:", userData.avatar);
                         if(userData.avatar.type === 'emoji' || userData.avatar.type === 'icon') {
                             avatarEl.textContent = userData.avatar.value;
                         } else {
@@ -820,21 +822,27 @@
                         }
                         avatarEl.style.background = userData.avatar.color;
                     } else {
+                        console.log("Avatar yok, oluşturuluyor...");
                         const initial = (userData.username || 'U').charAt(0).toUpperCase();
                         const defaultGradient = getRandomGradient();
+                        
+                        const newAvatar = {
+                            type: 'initial',
+                            value: initial,
+                            color: defaultGradient
+                        };
+                        
                         avatarEl.textContent = initial;
                         avatarEl.style.background = defaultGradient;
                         
+                        // Firestore'a kaydet
                         try {
-                            await updateDoc(doc(db, "users", user.uid), {
-                                avatar: {
-                                    type: 'initial',
-                                    value: initial,
-                                    color: defaultGradient
-                                }
-                            });
+                            await setDoc(doc(db, "users", user.uid), {
+                                avatar: newAvatar
+                            }, { merge: true });
+                            console.log("Avatar kaydedildi!");
                         } catch (err) {
-                            console.log("Avatar güncelleme hatası:", err);
+                            console.error("Avatar kaydetme hatası:", err);
                         }
                     }
                     
