@@ -711,12 +711,20 @@
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await saveUserToFirestore(userCredential.user.uid, email, username);
-                    showNotification("Kayıt Başarılı! Şimdi giriş yapabilirsin.", "success");
+                    
+                    // E-posta doğrulama gönder
+                    try {
+                        const { sendEmailVerification } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+                        await sendEmailVerification(userCredential.user);
+                        showNotification("Kayıt Başarılı! E-postanıza doğrulama linki gönderildi.", "success");
+                    } catch (verifyError) {
+                        showNotification("Kayıt Başarılı! Ancak doğrulama e-postası gönderilemedi.", "info");
+                    }
                     
                     setTimeout(() => {
                         setMode('login');
                         document.getElementById('email').value = email;
-                    }, 1500);
+                    }, 2000);
                 }
             } catch (error) {
                 let errorMessage = "Bir hata oluştu!";
@@ -911,8 +919,8 @@
                     
                     <div style="margin-bottom: 1rem;">
                         <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">E-posta</label>
-                        <input type="text" value="${userData.email}" disabled style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-secondary); outline: none; opacity: 0.5;">
-                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">E-posta değiştirilemez</p>
+                        <input id="editEmail" type="email" value="${userData.email}" style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-primary); outline: none;">
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">⚠️ E-posta değişirse tekrar doğrulama gerekir</p>
                     </div>
                     
                     <button id="saveProfileBtn" class="action-btn" style="margin-top: 1rem;">
@@ -931,22 +939,47 @@
                 
                 document.getElementById('saveProfileBtn').onclick = async () => {
                     const newUsername = document.getElementById('editUsername').value.trim();
+                    const newEmail = document.getElementById('editEmail').value.trim();
                     
                     if(!newUsername) {
                         showNotification("Kullanıcı adı boş olamaz!", "error");
                         return;
                     }
                     
+                    if(!newEmail) {
+                        showNotification("E-posta boş olamaz!", "error");
+                        return;
+                    }
+                    
                     try {
+                        // E-posta değişmişse, Firebase Authentication'da güncelle
+                        if(newEmail !== userData.email) {
+                            const { updateEmail } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+                            await updateEmail(currentUser, newEmail);
+                            showNotification("E-posta güncellendi! Lütfen yeni e-postanızı doğrulayın.", "success");
+                        }
+                        
+                        // Firestore'da güncelle
                         await updateDoc(doc(db, "users", currentUser.uid), {
-                            username: newUsername
+                            username: newUsername,
+                            email: newEmail
                         });
                         
                         showNotification("Profil güncellendi!", "success");
                         modal.remove();
                         await loadUserData(currentUser);
                     } catch (error) {
-                        showNotification("Güncelleme hatası: " + error.message, "error");
+                        let errorMessage = "Güncelleme hatası!";
+                        if(error.code === 'auth/requires-recent-login') {
+                            errorMessage = "E-posta değiştirmek için tekrar giriş yapmalısınız!";
+                        } else if(error.code === 'auth/email-already-in-use') {
+                            errorMessage = "Bu e-posta zaten kullanımda!";
+                        } else if(error.code === 'auth/invalid-email') {
+                            errorMessage = "Geçersiz e-posta adresi!";
+                        } else {
+                            errorMessage = error.message;
+                        }
+                        showNotification(errorMessage, "error");
                     }
                 };
                 
