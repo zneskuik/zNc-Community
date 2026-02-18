@@ -471,6 +471,10 @@
                         <span id="userEmail" class="font-semibold">-</span>
                     </div>
                     <div class="flex justify-between items-center py-2" style="border-bottom: 1px solid var(--border-color);">
+                        <span style="color: var(--text-secondary);">E-posta Durumu</span>
+                        <span id="emailVerified" class="font-semibold">-</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2" style="border-bottom: 1px solid var(--border-color);">
                         <span style="color: var(--text-secondary);">Kullanıcı Adı</span>
                         <span id="userUsername" class="font-semibold">-</span>
                     </div>
@@ -478,6 +482,11 @@
                         <span style="color: var(--text-secondary);">Hesap Durumu</span>
                         <span class="text-green-400 font-semibold">✓ Aktif</span>
                     </div>
+                </div>
+                <div id="verifyEmailBtn" style="display: none; margin-top: 1rem;">
+                    <button onclick="resendVerification()" class="action-btn">
+                        📧 Doğrulama E-postası Gönder
+                    </button>
                 </div>
             </div>
 
@@ -660,6 +669,7 @@
                     email: email,
                     username: username,
                     role: "user",
+                    emailVerified: false, // Başlangıçta doğrulanmamış
                     avatar: {
                         type: "initial",
                         value: username.charAt(0).toUpperCase(),
@@ -676,7 +686,8 @@
         async function updateLastLogin(userId) {
             try {
                 await setDoc(doc(db, "users", userId), {
-                    lastLogin: new Date().toISOString()
+                    lastLogin: new Date().toISOString(),
+                    emailVerified: currentUser.emailVerified // Firebase'den gerçek durumu al
                 }, { merge: true });
             } catch (error) {
                 console.error("Son giriş güncelleme hatası:", error);
@@ -763,6 +774,18 @@
                     document.getElementById('userEmail').textContent = userData.email;
                     document.getElementById('userUsername').textContent = userData.username || 'Belirtilmemiş';
                     
+                    // E-posta doğrulama durumu
+                    const emailVerifiedEl = document.getElementById('emailVerified');
+                    const verifyBtnEl = document.getElementById('verifyEmailBtn');
+                    
+                    if(currentUser.emailVerified) {
+                        emailVerifiedEl.innerHTML = '<span style="color: #10b981;">✓ Doğrulanmış</span>';
+                        verifyBtnEl.style.display = 'none';
+                    } else {
+                        emailVerifiedEl.innerHTML = '<span style="color: #ef4444;">✗ Doğrulanmamış</span>';
+                        verifyBtnEl.style.display = 'block';
+                    }
+                    
                     // Sadece baş harf göster
                     const avatarEl = document.getElementById('userAvatar');
                     const initial = (userData.username || 'U').charAt(0).toUpperCase();
@@ -822,8 +845,9 @@
                 let usersList = [];
                 let adminCount = 0;
                 
-                usersSnapshot.forEach((doc) => {
-                    const data = doc.data();
+                usersSnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    data.uid = docSnap.id; // UID'yi de ekleyelim
                     if(data.role === 'admin') adminCount++;
                     usersList.push(data);
                 });
@@ -832,7 +856,7 @@
                 modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1rem;';
                 
                 const modalContent = document.createElement('div');
-                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto;';
+                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 900px; width: 100%; max-height: 80vh; overflow-y: auto;';
                 
                 let usersHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -855,19 +879,31 @@
                                 <tr style="border-bottom: 1px solid var(--border-color);">
                                     <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">KULLANICI ADI</th>
                                     <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">E-POSTA</th>
+                                    <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">DOĞRULAMA</th>
                                     <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">ROL</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
                 
+                // Her kullanıcının e-posta doğrulama durumunu almak için Authentication'dan çekmemiz lazım
+                // Ama bu mümkün değil client-side'da, sadece kendi kullanıcımızın durumunu görebiliriz
+                // Bu yüzden Firestore'da saklayacağız veya sadece şu anki kullanıcı için göstereceğiz
+                
                 usersList.forEach(user => {
                     const roleColor = user.role === 'admin' ? '#fbbf24' : '#10b981';
                     const roleBadge = user.role === 'admin' ? '👑 Admin' : '👤 Kullanıcı';
+                    
+                    // E-posta doğrulama durumu - Firestore'dan al
+                    const verifiedBadge = user.emailVerified 
+                        ? '<span style="color: #10b981;">✓ Doğrulanmış</span>' 
+                        : '<span style="color: #ef4444;">✗ Doğrulanmamış</span>';
+                    
                     usersHTML += `
                         <tr style="border-bottom: 1px solid var(--border-color);">
                             <td style="padding: 0.75rem;">${user.username || '-'}</td>
                             <td style="padding: 0.75rem; color: var(--text-secondary);">${user.email}</td>
+                            <td style="padding: 0.75rem;">${verifiedBadge}</td>
                             <td style="padding: 0.75rem;"><span style="background: ${roleColor}20; color: ${roleColor}; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${roleBadge}</span></td>
                         </tr>
                     `;
@@ -995,6 +1031,16 @@
                 navigateTo('login');
             } catch (error) {
                 alert("Çıkış yapılırken hata oluştu: " + error.message);
+            }
+        }
+
+        window.resendVerification = async () => {
+            try {
+                const { sendEmailVerification } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+                await sendEmailVerification(currentUser);
+                showNotification("Doğrulama e-postası gönderildi! E-postanızı kontrol edin.", "success");
+            } catch (error) {
+                showNotification("E-posta gönderilemedi: " + error.message, "error");
             }
         }
 
