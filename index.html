@@ -313,17 +313,13 @@
         .avatar {
             width: 40px;
             height: 40px;
+            background: linear-gradient(135deg, #6d28d9 0%, #3b82f6 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .avatar:hover {
-            transform: scale(1.1);
         }
 
         .grid-3 {
@@ -349,115 +345,6 @@
                 top: 10px;
                 right: 10px;
             }
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s;
-            font-size: 1.5rem;
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .avatar-option:hover {
-            transform: scale(1.1);
-            border-color: #8b5cf6;
-        }
-
-        .avatar-option.selected {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3);
-            background: rgba(139, 92, 246, 0.2);
-        }
-
-        .color-option {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.selected {
-            border-color: white;
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.4);
-        }
-
-        .color-option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .section-title {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .picker-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .color-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
         }
     </style>
 </head>
@@ -533,7 +420,7 @@
             </div>
             
             <div class="flex items-center gap-4">
-                <div id="userAvatar" class="avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <div id="userAvatar" class="avatar"></div>
                 <button onclick="logout()" class="btn-secondary">Çıkış Yap</button>
             </div>
         </nav>
@@ -642,26 +529,6 @@
         let currentMode = 'login';
         let currentUser = null;
         let isAdmin = false;
-
-        // Avatar verileri
-        const AVATAR_DATA = {
-            emojis: ['😀', '😎', '🔥', '💪', '👑', '🎮', '⚡', '🌟', '🚀', '💎', '🎯', '🏆', '🐱', '🐶', '🦊', '🦁'],
-            icons: ['👤', '🦁', '🐯', '🦅', '🐉', '🦊', '🐺', '🦄', '🐼', '🦋', '🌈', '⭐', '🎭', '🎪', '🎨', '🎬'],
-            gradients: [
-                { name: 'Mor-Mavi', value: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                { name: 'Pembe-Kırmızı', value: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                { name: 'Mavi-Açık Mavi', value: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                { name: 'Yeşil-Turkuaz', value: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
-                { name: 'Pembe-Sarı', value: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                { name: 'Turkuaz-Mor', value: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)' },
-                { name: 'Açık Mavi-Pembe', value: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' },
-                { name: 'Kırmızı-Pembe', value: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' },
-                { name: 'Turuncu-Kırmızı', value: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)' },
-                { name: 'Mavi-Mor', value: 'linear-gradient(135deg, #5ee7df 0%, #b490ca 100%)' },
-                { name: 'Sarı-Turuncu', value: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)' },
-                { name: 'Gri-Mavi', value: 'linear-gradient(135deg, #636e72 0%, #2d3436 100%)' }
-            ]
-        };
 
         // Theme Management
         function initTheme() {
@@ -773,7 +640,17 @@
         }
 
         function getRandomGradient() {
-            return AVATAR_DATA.gradients[Math.floor(Math.random() * AVATAR_DATA.gradients.length)].value;
+            const gradients = [
+                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+                "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+                "linear-gradient(135deg, #30cfd0 0%, #330867 100%)",
+                "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+                "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
+            ];
+            return gradients[Math.floor(Math.random() * gradients.length)];
         }
 
         async function saveUserToFirestore(userId, email, username) {
@@ -878,44 +755,13 @@
                     document.getElementById('userEmail').textContent = userData.email;
                     document.getElementById('userUsername').textContent = userData.username || 'Belirtilmemiş';
                     
+                    // Sadece baş harf göster
                     const avatarEl = document.getElementById('userAvatar');
+                    const initial = (userData.username || 'U').charAt(0).toUpperCase();
+                    const avatarColor = userData.avatar?.color || getRandomGradient();
                     
-                    // Avatar gösterimi - DÜZELTİLMİŞ VERSİYON
-                    if (userData.avatar && userData.avatar.color) {
-                        const avatar = userData.avatar;
-                        
-                        // Type kontrolü
-                        if (avatar.type === 'emoji' || avatar.type === 'icon') {
-                            avatarEl.textContent = avatar.value;
-                        } else {
-                            // initial veya type yoksa
-                            avatarEl.textContent = (userData.username || 'U').charAt(0).toUpperCase();
-                        }
-                        
-                        // Renk uygula
-                        avatarEl.style.background = avatar.color;
-                        
-                    } else {
-                        // Avatar yoksa varsayılan oluştur
-                        const initial = (userData.username || 'U').charAt(0).toUpperCase();
-                        const defaultGradient = getRandomGradient();
-                        
-                        avatarEl.textContent = initial;
-                        avatarEl.style.background = defaultGradient;
-                        
-                        // Firestore'a kaydet
-                        try {
-                            await setDoc(doc(db, "users", user.uid), {
-                                avatar: {
-                                    type: 'initial',
-                                    value: initial,
-                                    color: defaultGradient
-                                }
-                            }, { merge: true });
-                        } catch (err) {
-                            console.error("Avatar kaydetme hatası:", err);
-                        }
-                    }
+                    avatarEl.textContent = initial;
+                    avatarEl.style.background = avatarColor;
                     
                     if(userData.createdAt) {
                         const date = new Date(userData.createdAt);
@@ -975,15 +821,15 @@
                 });
                 
                 const modal = document.createElement('div');
-                modal.className = 'modal-overlay';
+                modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1rem;';
                 
                 const modalContent = document.createElement('div');
-                modalContent.className = 'modal-content';
+                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto;';
                 
                 let usersHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--text-primary);">👥 Tüm Kullanıcılar</h2>
-                        <button onclick="this.closest('.modal-overlay').remove()" class="btn-secondary">✕ Kapat</button>
+                        <button onclick="this.closest('[style*=fixed]').remove()" style="background: rgba(139, 92, 246, 0.2); color: var(--text-primary); border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer;">✕ Kapat</button>
                     </div>
                     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                         <div style="background: rgba(124, 58, 237, 0.2); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; flex: 1; text-align: center;">
@@ -1041,212 +887,70 @@
             }
         }
 
-        // DÜZELTİLMİŞ AVATAR EDİTÖRÜ
         window.showEditProfile = async () => {
             try {
                 const userDoc = await getDoc(doc(db, "users", currentUser.uid));
                 const userData = userDoc.data();
                 
-                // Mevcut avatarı al veya varsayılan oluştur
-                let selectedAvatar = userData.avatar || { 
-                    type: 'initial', 
-                    value: (userData.username || 'U').charAt(0).toUpperCase(), 
-                    color: AVATAR_DATA.gradients[0].value 
-                };
-
-                // Eğer type yoksa varsayılan ata
-                if (!selectedAvatar.type) selectedAvatar.type = 'initial';
-                if (!selectedAvatar.color) selectedAvatar.color = AVATAR_DATA.gradients[0].value;
-                if (!selectedAvatar.value) selectedAvatar.value = (userData.username || 'U').charAt(0).toUpperCase();
-                
                 const modal = document.createElement('div');
-                modal.className = 'modal-overlay';
+                modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1rem;';
                 
                 const modalContent = document.createElement('div');
-                modalContent.className = 'modal-content';
-                
-                function updatePreview() {
-                    const preview = document.getElementById('avatarPreview');
-                    if (!preview) return;
-                    
-                    if (selectedAvatar.type === 'emoji' || selectedAvatar.type === 'icon') {
-                        preview.textContent = selectedAvatar.value;
-                    } else {
-                        preview.textContent = (userData.username || 'U').charAt(0).toUpperCase();
-                    }
-                    preview.style.background = selectedAvatar.color;
-                }
+                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 500px; width: 100%;';
                 
                 modalContent.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--text-primary);">✏️ Profili Düzenle</h2>
-                        <button onclick="this.closest('.modal-overlay').remove()" class="btn-secondary">✕</button>
+                        <button onclick="this.closest('[style*=fixed]').remove()" style="background: rgba(139, 92, 246, 0.2); color: var(--text-primary); border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer;">✕</button>
                     </div>
                     
-                    <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-                        <div id="avatarPreview" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: all 0.3s ease;" 
-                             style="background: ${selectedAvatar.color};">
-                            ${selectedAvatar.type === 'emoji' || selectedAvatar.type === 'icon' ? selectedAvatar.value : (userData.username || 'U').charAt(0).toUpperCase()}
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <div class="section-title">🎨 Arka Plan Rengi</div>
-                        <div class="color-grid" id="colorPicker"></div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <div class="section-title">😀 Emoji Avatar</div>
-                        <div class="picker-grid" id="emojiPicker"></div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <div class="section-title">🎭 İkon Avatar</div>
-                        <div class="picker-grid" id="iconPicker"></div>
-                    </div>
-                    
-                    <div class="mb-4">
+                    <div style="margin-bottom: 1rem;">
                         <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Kullanıcı Adı</label>
-                        <input id="editUsername" type="text" value="${userData.username || ''}" 
-                               style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 12px; color: var(--text-primary); outline: none; font-size: 1rem; transition: all 0.3s;"
-                               onfocus="this.style.borderColor='#8b5cf6'" onblur="this.style.borderColor='var(--border-color)'">
+                        <input id="editUsername" type="text" value="${userData.username || ''}" style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-primary); outline: none;">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">E-posta</label>
+                        <input type="text" value="${userData.email}" disabled style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-secondary); outline: none; opacity: 0.5;">
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">E-posta değiştirilemez</p>
                     </div>
                     
                     <button id="saveProfileBtn" class="action-btn" style="margin-top: 1rem;">
-                        💾 Değişiklikleri Kaydet
+                        Kaydet
                     </button>
                 `;
                 
                 modal.appendChild(modalContent);
                 document.body.appendChild(modal);
                 
-                // Renk seçici oluştur
-                const colorPicker = document.getElementById('colorPicker');
-                AVATAR_DATA.gradients.forEach((grad, index) => {
-                    const colorBtn = document.createElement('div');
-                    const isSelected = selectedAvatar.color === grad.value;
-                    colorBtn.className = `color-option ${isSelected ? 'selected' : ''}`;
-                    colorBtn.style.background = grad.value;
-                    colorBtn.title = grad.name;
-                    
-                    colorBtn.onclick = () => {
-                        // Tüm seçimleri kaldır
-                        colorPicker.querySelectorAll('.color-option').forEach(el => {
-                            el.classList.remove('selected');
-                        });
-                        
-                        // Yeni seçimi işaretle
-                        colorBtn.classList.add('selected');
-                        
-                        selectedAvatar.color = grad.value;
-                        updatePreview();
-                    };
-                    colorPicker.appendChild(colorBtn);
-                });
-                
-                // Emoji seçici oluştur
-                const emojiPicker = document.getElementById('emojiPicker');
-                AVATAR_DATA.emojis.forEach(emoji => {
-                    const emojiBtn = document.createElement('div');
-                    const isSelected = selectedAvatar.type === 'emoji' && selectedAvatar.value === emoji;
-                    emojiBtn.className = `avatar-option ${isSelected ? 'selected' : ''}`;
-                    emojiBtn.textContent = emoji;
-                    
-                    emojiBtn.onclick = () => {
-                        // Tüm avatar seçimlerini temizle
-                        document.querySelectorAll('#emojiPicker .avatar-option, #iconPicker .avatar-option').forEach(el => {
-                            el.classList.remove('selected');
-                        });
-                        
-                        // Yeni seçimi işaretle
-                        emojiBtn.classList.add('selected');
-                        
-                        selectedAvatar = {
-                            type: 'emoji',
-                            value: emoji,
-                            color: selectedAvatar.color
-                        };
-                        updatePreview();
-                    };
-                    emojiPicker.appendChild(emojiBtn);
-                });
-                
-                // İkon seçici oluştur
-                const iconPicker = document.getElementById('iconPicker');
-                AVATAR_DATA.icons.forEach(icon => {
-                    const iconBtn = document.createElement('div');
-                    const isSelected = selectedAvatar.type === 'icon' && selectedAvatar.value === icon;
-                    iconBtn.className = `avatar-option ${isSelected ? 'selected' : ''}`;
-                    iconBtn.textContent = icon;
-                    
-                    iconBtn.onclick = () => {
-                        // Tüm avatar seçimlerini temizle
-                        document.querySelectorAll('#emojiPicker .avatar-option, #iconPicker .avatar-option').forEach(el => {
-                            el.classList.remove('selected');
-                        });
-                        
-                        // Yeni seçimi işaretle
-                        iconBtn.classList.add('selected');
-                        
-                        selectedAvatar = {
-                            type: 'icon',
-                            value: icon,
-                            color: selectedAvatar.color
-                        };
-                        updatePreview();
-                    };
-                    iconPicker.appendChild(iconBtn);
-                });
-                
-                // Modal dışına tıklama ile kapatma
                 modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
+                    if(e.target === modal) {
                         modal.remove();
                     }
                 });
                 
-                // Kaydetme işlemi
                 document.getElementById('saveProfileBtn').onclick = async () => {
                     const newUsername = document.getElementById('editUsername').value.trim();
-                    const btn = document.getElementById('saveProfileBtn');
                     
-                    if (!newUsername) {
+                    if(!newUsername) {
                         showNotification("Kullanıcı adı boş olamaz!", "error");
                         return;
                     }
                     
-                    // Buton loading durumu
-                    btn.innerHTML = '💾 Kaydediliyor...';
-                    btn.disabled = true;
-                    btn.style.opacity = '0.7';
-                    
                     try {
-                        // Firestore güncelleme - DÜZELTİLMİŞ
                         await updateDoc(doc(db, "users", currentUser.uid), {
-                            username: newUsername,
-                            avatar: {
-                                type: selectedAvatar.type,
-                                value: selectedAvatar.value,
-                                color: selectedAvatar.color
-                            },
-                            updatedAt: new Date().toISOString()
+                            username: newUsername
                         });
                         
-                        showNotification("✅ Profil başarıyla güncellendi!", "success");
+                        showNotification("Profil güncellendi!", "success");
                         modal.remove();
                         await loadUserData(currentUser);
-                        
                     } catch (error) {
-                        console.error("Güncelleme hatası:", error);
-                        showNotification("❌ Güncelleme hatası: " + error.message, "error");
-                        btn.innerHTML = '💾 Değişiklikleri Kaydet';
-                        btn.disabled = false;
-                        btn.style.opacity = '1';
+                        showNotification("Güncelleme hatası: " + error.message, "error");
                     }
                 };
                 
             } catch (error) {
-                console.error("Profil yükleme hatası:", error);
                 showNotification("Profil yüklenemedi!", "error");
             }
         }
