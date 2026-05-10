@@ -7,82 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-primary: #09090b;
-            --bg-secondary: rgba(24, 24, 27, 0.6);
-            --text-primary: white;
-            --text-secondary: #a1a1aa;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(24, 24, 27, 0.6);
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #f3f4f6;
-            --bg-secondary: rgba(255, 255, 255, 0.7);
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: rgba(0, 0, 0, 0.1);
-            --glass-bg: rgba(255, 255, 255, 0.7);
-        }
-
-        * {
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-
         body { 
-            background-color: var(--bg-primary);
+            background-color: #09090b;
             background-image: 
                 radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
-            color: var(--text-primary);
+            color: white;
             margin: 0;
-            overflow-x: hidden;
-        }
-
-        [data-theme="light"] body {
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
-        }
-
-        .theme-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            padding: 0.4rem;
-            display: flex;
-            gap: 0.25rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            background: transparent;
-            transition: all 0.2s ease;
-        }
-
-        .theme-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .theme-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
         }
 
         .page {
@@ -93,54 +26,55 @@
             display: block;
         }
 
-        #loginPage.active {
+        .center-container {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding: 1rem;
         }
 
+        /* Cam Efekti Kart */
         .glass-card {
-            background: var(--glass-bg);
+            background: rgba(24, 24, 27, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 380px;
             padding: 2rem;
-            margin: 1rem;
             position: relative;
             overflow: hidden;
         }
 
+        /* Input Alanları */
         .input-group {
             position: relative;
             margin-bottom: 1rem;
         }
-        
         .custom-input {
             width: 100%;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1rem;
             border-radius: 12px;
-            color: var(--text-primary);
+            color: white;
             outline: none;
             transition: all 0.3s ease;
             font-size: 0.95rem;
         }
-        
         .custom-input:focus {
             border-color: #8b5cf6;
+            background: rgba(255, 255, 255, 0.05);
             box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
         }
-        
         .custom-input::placeholder {
-            color: var(--text-secondary);
+            color: #71717a;
         }
 
+        /* Logo Kutusu */
         .logo-container {
             width: 64px;
             height: 64px;
@@ -153,18 +87,14 @@
             box-shadow: 0 10px 25px -5px rgba(109, 40, 217, 0.5);
         }
 
+        /* Buton Grubu */
         .toggle-container {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             padding: 4px;
             border-radius: 12px;
             display: flex;
             margin-bottom: 1.5rem;
         }
-        
-        [data-theme="light"] .toggle-container {
-            background: rgba(0, 0, 0, 0.05);
-        }
-        
         .toggle-btn {
             flex: 1;
             padding: 8px;
@@ -174,15 +104,15 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: var(--text-secondary);
+            color: #a1a1aa;
         }
-        
         .toggle-btn.active {
-            background: rgba(139, 92, 246, 0.2);
-            color: var(--text-primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
+        /* Ana Buton */
         .action-btn {
             background: linear-gradient(to right, #7c3aed, #4f46e5);
             color: white;
@@ -195,11 +125,11 @@
             border: none;
             cursor: pointer;
         }
-        
         .action-btn:active {
             transform: scale(0.98);
         }
 
+        /* Şifremi Unuttum Linki */
         .forgot-password {
             color: #8b5cf6;
             font-size: 0.85rem;
@@ -208,45 +138,39 @@
             display: inline-block;
             margin-top: 0.5rem;
         }
-        
         .forgot-password:hover {
             color: #a78bfa;
         }
 
+        /* Bildirim */
         .notification {
             position: fixed;
-            top: 80px;
+            top: 20px;
             right: 20px;
-            background: var(--glass-bg);
+            background: rgba(24, 24, 27, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 1rem 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             display: none;
-            z-index: 9999;
+            z-index: 1000;
             min-width: 300px;
             max-width: 90%;
-            color: var(--text-primary);
         }
-        
         .notification.show {
             display: block;
             animation: slideIn 0.3s ease;
         }
-        
         .notification.success {
             border-left: 4px solid #10b981;
         }
-        
         .notification.error {
             border-left: 4px solid #ef4444;
         }
-        
         .notification.info {
             border-left: 4px solid #3b82f6;
         }
-        
         @keyframes slideIn {
             from {
                 transform: translateX(400px);
@@ -258,6 +182,7 @@
             }
         }
 
+        /* Dashboard Stilleri */
         .dashboard-container {
             padding: 2rem;
             max-width: 1200px;
@@ -266,9 +191,10 @@
         }
 
         .navbar {
-            background: var(--glass-bg);
+            background: rgba(24, 24, 27, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -281,33 +207,27 @@
 
         .stat-card {
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 1.5rem;
             transition: transform 0.2s;
         }
-        
         .stat-card:hover {
             transform: translateY(-4px);
         }
-        
-        .stat-card.clickable {
-            cursor: pointer;
-        }
 
         .btn-secondary {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-weight: 600;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.2s;
         }
-        
         .btn-secondary:hover {
-            background: rgba(139, 92, 246, 0.25);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .avatar {
@@ -341,29 +261,15 @@
                 flex-direction: column;
                 gap: 1rem;
             }
-            .theme-switch {
-                top: 10px;
-                right: 10px;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Theme Switch -->
-    <div class="theme-switch">
-        <button class="theme-btn" id="darkBtn" onclick="setTheme('dark')" title="Dark Mode">
-            🌙
-        </button>
-        <button class="theme-btn" id="lightBtn" onclick="setTheme('light')" title="Light Mode">
-            ☀️
-        </button>
-    </div>
-
     <div id="notification" class="notification"></div>
 
     <!-- GİRİŞ SAYFASI -->
-    <div id="loginPage" class="page">
+    <div id="loginPage" class="page center-container">
         <div class="glass-card">
             <div class="logo-container">
                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,7 +278,7 @@
             </div>
 
             <h2 class="text-2xl font-bold text-center mb-1">zNc Community</h2>
-            <p id="pageSubtitle" class="text-center mb-6" style="color: var(--text-secondary); font-size: 0.875rem;">Topluluğa Hoş Geldin</p>
+            <p id="pageSubtitle" class="text-center text-gray-500 text-sm mb-6">Topluluğa Hoş Geldin</p>
 
             <div class="toggle-container">
                 <div id="btn-login" class="toggle-btn active" onclick="setMode('login')">Giriş Yap</div>
@@ -401,7 +307,7 @@
                 </div>
             </div>
 
-            <p class="text-center mt-6" style="color: var(--text-secondary); font-size: 0.75rem;">
+            <p class="text-center text-gray-500 text-xs mt-6">
                 &copy; 2025 zNc Community. Tüm hakları saklıdır.
             </p>
         </div>
@@ -409,6 +315,7 @@
 
     <!-- DASHBOARD SAYFASI -->
     <div id="dashboardPage" class="page">
+        <!-- Navbar -->
         <nav class="navbar">
             <div class="flex items-center gap-3">
                 <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #6d28d9 0%, #3b82f6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
@@ -425,16 +332,19 @@
             </div>
         </nav>
 
+        <!-- Ana İçerik -->
         <div class="dashboard-container">
+            <!-- Hoşgeldin Mesajı -->
             <div class="glass-card" style="margin-bottom: 1.5rem;">
                 <h1 class="text-3xl font-bold mb-2">Hoş Geldin, <span id="userName">Kullanıcı</span>! 👋</h1>
-                <p style="color: var(--text-secondary);">zNc Community'ye hoş geldin. Burası senin ana panelindir.</p>
+                <p class="text-gray-400">zNc Community'ye hoş geldin. Burası senin ana panelindir.</p>
             </div>
 
+            <!-- İstatistikler -->
             <div class="grid-3">
-                <div class="stat-card clickable" id="totalUsersCard" onclick="showAllUsers()">
+                <div class="stat-card">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600;">TOPLAM ÜYE</h3>
+                        <h3 class="text-gray-400 text-sm font-semibold">TOPLAM ÜYE</h3>
                         <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
@@ -444,7 +354,7 @@
 
                 <div class="stat-card">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600;">ÜYELİK TARİHİN</h3>
+                        <h3 class="text-gray-400 text-sm font-semibold">ÜYELİK TARİHİN</h3>
                         <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
@@ -454,7 +364,7 @@
 
                 <div class="stat-card">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600;">SON GİRİŞ</h3>
+                        <h3 class="text-gray-400 text-sm font-semibold">SON GİRİŞ</h3>
                         <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -463,37 +373,30 @@
                 </div>
             </div>
 
+            <!-- Profil Bilgileri -->
             <div class="glass-card" style="margin-bottom: 1.5rem;">
                 <h2 class="text-xl font-bold mb-4">Profil Bilgilerin</h2>
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center py-2" style="border-bottom: 1px solid var(--border-color);">
-                        <span style="color: var(--text-secondary);">E-posta</span>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-800">
+                        <span class="text-gray-400">E-posta</span>
                         <span id="userEmail" class="font-semibold">-</span>
                     </div>
-                    <div class="flex justify-between items-center py-2" style="border-bottom: 1px solid var(--border-color);">
-                        <span style="color: var(--text-secondary);">E-posta Durumu</span>
-                        <span id="emailVerified" class="font-semibold">-</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2" style="border-bottom: 1px solid var(--border-color);">
-                        <span style="color: var(--text-secondary);">Kullanıcı Adı</span>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-800">
+                        <span class="text-gray-400">Kullanıcı Adı</span>
                         <span id="userUsername" class="font-semibold">-</span>
                     </div>
                     <div class="flex justify-between items-center py-2">
-                        <span style="color: var(--text-secondary);">Hesap Durumu</span>
+                        <span class="text-gray-400">Hesap Durumu</span>
                         <span class="text-green-400 font-semibold">✓ Aktif</span>
                     </div>
                 </div>
-                <div id="verifyEmailBtn" style="display: none; margin-top: 1rem;">
-                    <button onclick="resendVerification()" class="action-btn">
-                        📧 Doğrulama E-postası Gönder
-                    </button>
-                </div>
             </div>
 
+            <!-- Hızlı Aksiyonlar -->
             <div class="glass-card">
                 <h2 class="text-xl font-bold mb-4">Hızlı İşlemler</h2>
                 <div class="grid-3">
-                    <button class="action-btn" onclick="showEditProfile()">
+                    <button class="action-btn" onclick="alert('Bu özellik yakında eklenecek!')">
                         <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
@@ -520,8 +423,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Firebase Yapılandırması
         const firebaseConfig = {
           apiKey: "AIzaSyAi2CKj4TZVVNps9zARFqJz1H9hPescd5g",
           authDomain: "earnest-command-427012-v4.firebaseapp.com",
@@ -537,22 +441,8 @@
 
         let currentMode = 'login';
         let currentUser = null;
-        let isAdmin = false;
 
-        // Theme Management
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            setTheme(savedTheme);
-        }
-
-        window.setTheme = (theme) => {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            
-            document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
-            document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
-        }
-
+        // Sayfa Yönlendirme Sistemi (Hash Router)
         function showPage(pageName) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const page = document.getElementById(pageName + 'Page');
@@ -565,6 +455,7 @@
             window.location.hash = path;
         }
 
+        // URL değişimini dinle
         window.addEventListener('hashchange', handleRoute);
         
         function handleRoute() {
@@ -577,14 +468,17 @@
             } else if (hash === 'login' || !currentUser) {
                 showPage('login');
             } else {
+                // Giriş yapmamışsa login'e yönlendir
                 navigateTo('login');
             }
         }
 
+        // Kullanıcı Kontrolü
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             
             if (user) {
+                // Kullanıcı giriş yapmış
                 const hash = window.location.hash.slice(1);
                 if (!hash || hash === 'login') {
                     navigateTo('dashboard');
@@ -592,10 +486,12 @@
                     handleRoute();
                 }
             } else {
+                // Kullanıcı giriş yapmamış
                 navigateTo('login');
             }
         });
 
+        // Bildirim Göster
         function showNotification(message, type = 'info') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -606,6 +502,7 @@
             }, 4000);
         }
 
+        // Mod Değiştirme
         window.setMode = (mode) => {
             currentMode = mode;
             const loginBtn = document.getElementById('btn-login');
@@ -632,6 +529,7 @@
             }
         }
 
+        // Şifremi Unuttum
         window.showForgotPassword = async () => {
             const email = document.getElementById('email').value;
             
@@ -648,33 +546,12 @@
             }
         }
 
-        function getRandomGradient() {
-            const gradients = [
-                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-                "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-                "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
-                "linear-gradient(135deg, #30cfd0 0%, #330867 100%)",
-                "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
-                "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
-            ];
-            return gradients[Math.floor(Math.random() * gradients.length)];
-        }
-
+        // Kullanıcı Verilerini Kaydet
         async function saveUserToFirestore(userId, email, username) {
             try {
-                const defaultGradient = getRandomGradient();
                 await setDoc(doc(db, "users", userId), {
                     email: email,
                     username: username,
-                    role: "user",
-                    emailVerified: false, // Başlangıçta doğrulanmamış
-                    avatar: {
-                        type: "initial",
-                        value: username.charAt(0).toUpperCase(),
-                        color: defaultGradient
-                    },
                     createdAt: new Date().toISOString(),
                     lastLogin: new Date().toISOString()
                 });
@@ -683,17 +560,18 @@
             }
         }
 
+        // Son Giriş Güncelle
         async function updateLastLogin(userId) {
             try {
                 await setDoc(doc(db, "users", userId), {
-                    lastLogin: new Date().toISOString(),
-                    emailVerified: currentUser.emailVerified // Firebase'den gerçek durumu al
+                    lastLogin: new Date().toISOString()
                 }, { merge: true });
             } catch (error) {
                 console.error("Son giriş güncelleme hatası:", error);
             }
         }
 
+        // Giriş / Kayıt
         window.handleAuth = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -719,23 +597,16 @@
                     const userCredential = await signInWithEmailAndPassword(auth, email, password);
                     await updateLastLogin(userCredential.user.uid);
                     showNotification("Giriş Başarılı! Hoş geldin.", "success");
+                    // Dashboard'a yönlendir (onAuthStateChanged otomatik yapacak)
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await saveUserToFirestore(userCredential.user.uid, email, username);
-                    
-                    // E-posta doğrulama gönder
-                    try {
-                        const { sendEmailVerification } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
-                        await sendEmailVerification(userCredential.user);
-                        showNotification("Kayıt Başarılı! E-postanıza doğrulama linki gönderildi.", "success");
-                    } catch (verifyError) {
-                        showNotification("Kayıt Başarılı! Ancak doğrulama e-postası gönderilemedi.", "info");
-                    }
+                    showNotification("Kayıt Başarılı! Şimdi giriş yapabilirsin.", "success");
                     
                     setTimeout(() => {
                         setMode('login');
                         document.getElementById('email').value = email;
-                    }, 2000);
+                    }, 1500);
                 }
             } catch (error) {
                 let errorMessage = "Bir hata oluştu!";
@@ -762,37 +633,20 @@
             }
         };
 
+        // Kullanıcı Verilerini Yükle
         async function loadUserData(user) {
             try {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    isAdmin = userData.role === 'admin';
                     
                     document.getElementById('userName').textContent = userData.username || 'Kullanıcı';
                     document.getElementById('userEmail').textContent = userData.email;
                     document.getElementById('userUsername').textContent = userData.username || 'Belirtilmemiş';
                     
-                    // E-posta doğrulama durumu
-                    const emailVerifiedEl = document.getElementById('emailVerified');
-                    const verifyBtnEl = document.getElementById('verifyEmailBtn');
-                    
-                    if(currentUser.emailVerified) {
-                        emailVerifiedEl.innerHTML = '<span style="color: #10b981;">✓ Doğrulanmış</span>';
-                        verifyBtnEl.style.display = 'none';
-                    } else {
-                        emailVerifiedEl.innerHTML = '<span style="color: #ef4444;">✗ Doğrulanmamış</span>';
-                        verifyBtnEl.style.display = 'block';
-                    }
-                    
-                    // Sadece baş harf göster
-                    const avatarEl = document.getElementById('userAvatar');
                     const initial = (userData.username || 'U').charAt(0).toUpperCase();
-                    const avatarColor = userData.avatar?.color || getRandomGradient();
-                    
-                    avatarEl.textContent = initial;
-                    avatarEl.style.background = avatarColor;
+                    document.getElementById('userAvatar').textContent = initial;
                     
                     if(userData.createdAt) {
                         const date = new Date(userData.createdAt);
@@ -812,19 +666,13 @@
                             document.getElementById('lastLogin').textContent = lastLogin.toLocaleString('tr-TR');
                         }
                     }
-                    
-                    if(isAdmin) {
-                        const userName = document.getElementById('userName');
-                        if(!userName.innerHTML.includes('👑')) {
-                            userName.innerHTML += ' <span style="color: #fbbf24; font-size: 0.8em;">👑 Admin</span>';
-                        }
-                    }
                 }
             } catch (error) {
                 console.error("Kullanıcı verisi yükleme hatası:", error);
             }
         }
 
+        // İstatistikleri Yükle
         async function loadStats() {
             try {
                 const usersSnapshot = await getDocs(collection(db, "users"));
@@ -834,196 +682,7 @@
             }
         }
 
-        window.showAllUsers = async () => {
-            if(!isAdmin) {
-                showNotification("Bu özelliğe erişim yetkiniz yok!", "error");
-                return;
-            }
-
-            try {
-                const usersSnapshot = await getDocs(collection(db, "users"));
-                let usersList = [];
-                let adminCount = 0;
-                
-                usersSnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    data.uid = docSnap.id; // UID'yi de ekleyelim
-                    if(data.role === 'admin') adminCount++;
-                    usersList.push(data);
-                });
-                
-                const modal = document.createElement('div');
-                modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1rem;';
-                
-                const modalContent = document.createElement('div');
-                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 900px; width: 100%; max-height: 80vh; overflow-y: auto;';
-                
-                let usersHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--text-primary);">👥 Tüm Kullanıcılar</h2>
-                        <button onclick="this.closest('[style*=fixed]').remove()" style="background: rgba(139, 92, 246, 0.2); color: var(--text-primary); border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer;">✕ Kapat</button>
-                    </div>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: rgba(124, 58, 237, 0.2); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; flex: 1; text-align: center;">
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">TOPLAM KULLANICI</p>
-                            <p style="font-size: 2rem; font-weight: bold; color: var(--text-primary);">${usersSnapshot.size}</p>
-                        </div>
-                        <div style="background: rgba(251, 191, 36, 0.2); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; flex: 1; text-align: center;">
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">YÖNETİCİLER</p>
-                            <p style="font-size: 2rem; font-weight: bold; color: #fbbf24;">${adminCount}</p>
-                        </div>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1rem; overflow-x: auto;">
-                        <table style="width: 100%; color: var(--text-primary); border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 1px solid var(--border-color);">
-                                    <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">KULLANICI ADI</th>
-                                    <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">E-POSTA</th>
-                                    <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">DOĞRULAMA</th>
-                                    <th style="padding: 0.75rem; text-align: left; color: var(--text-secondary); font-size: 0.875rem;">ROL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-                
-                // Her kullanıcının e-posta doğrulama durumunu almak için Authentication'dan çekmemiz lazım
-                // Ama bu mümkün değil client-side'da, sadece kendi kullanıcımızın durumunu görebiliriz
-                // Bu yüzden Firestore'da saklayacağız veya sadece şu anki kullanıcı için göstereceğiz
-                
-                usersList.forEach(user => {
-                    const roleColor = user.role === 'admin' ? '#fbbf24' : '#10b981';
-                    const roleBadge = user.role === 'admin' ? '👑 Admin' : '👤 Kullanıcı';
-                    
-                    // E-posta doğrulama durumu - Firestore'dan al
-                    const verifiedBadge = user.emailVerified 
-                        ? '<span style="color: #10b981;">✓ Doğrulanmış</span>' 
-                        : '<span style="color: #ef4444;">✗ Doğrulanmamış</span>';
-                    
-                    usersHTML += `
-                        <tr style="border-bottom: 1px solid var(--border-color);">
-                            <td style="padding: 0.75rem;">${user.username || '-'}</td>
-                            <td style="padding: 0.75rem; color: var(--text-secondary);">${user.email}</td>
-                            <td style="padding: 0.75rem;">${verifiedBadge}</td>
-                            <td style="padding: 0.75rem;"><span style="background: ${roleColor}20; color: ${roleColor}; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${roleBadge}</span></td>
-                        </tr>
-                    `;
-                });
-                
-                usersHTML += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                
-                modalContent.innerHTML = usersHTML;
-                modal.appendChild(modalContent);
-                document.body.appendChild(modal);
-                
-                modal.addEventListener('click', (e) => {
-                    if(e.target === modal) {
-                        modal.remove();
-                    }
-                });
-                
-            } catch (error) {
-                console.error("Kullanıcı listesi yükleme hatası:", error);
-                showNotification("Kullanıcı listesi yüklenemedi!", "error");
-            }
-        }
-
-        window.showEditProfile = async () => {
-            try {
-                const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-                const userData = userDoc.data();
-                
-                const modal = document.createElement('div');
-                modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1rem;';
-                
-                const modalContent = document.createElement('div');
-                modalContent.style.cssText = 'background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; max-width: 500px; width: 100%;';
-                
-                modalContent.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.5rem; font-weight: bold; color: var(--text-primary);">✏️ Profili Düzenle</h2>
-                        <button onclick="this.closest('[style*=fixed]').remove()" style="background: rgba(139, 92, 246, 0.2); color: var(--text-primary); border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer;">✕</button>
-                    </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Kullanıcı Adı</label>
-                        <input id="editUsername" type="text" value="${userData.username || ''}" style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-primary); outline: none;">
-                    </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">E-posta</label>
-                        <input id="editEmail" type="email" value="${userData.email}" style="width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; color: var(--text-primary); outline: none;">
-                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">⚠️ E-posta değişirse tekrar doğrulama gerekir</p>
-                    </div>
-                    
-                    <button id="saveProfileBtn" class="action-btn" style="margin-top: 1rem;">
-                        Kaydet
-                    </button>
-                `;
-                
-                modal.appendChild(modalContent);
-                document.body.appendChild(modal);
-                
-                modal.addEventListener('click', (e) => {
-                    if(e.target === modal) {
-                        modal.remove();
-                    }
-                });
-                
-                document.getElementById('saveProfileBtn').onclick = async () => {
-                    const newUsername = document.getElementById('editUsername').value.trim();
-                    const newEmail = document.getElementById('editEmail').value.trim();
-                    
-                    if(!newUsername) {
-                        showNotification("Kullanıcı adı boş olamaz!", "error");
-                        return;
-                    }
-                    
-                    if(!newEmail) {
-                        showNotification("E-posta boş olamaz!", "error");
-                        return;
-                    }
-                    
-                    try {
-                        // E-posta değişmişse, Firebase Authentication'da güncelle
-                        if(newEmail !== userData.email) {
-                            const { updateEmail } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
-                            await updateEmail(currentUser, newEmail);
-                            showNotification("E-posta güncellendi! Lütfen yeni e-postanızı doğrulayın.", "success");
-                        }
-                        
-                        // Firestore'da güncelle
-                        await updateDoc(doc(db, "users", currentUser.uid), {
-                            username: newUsername,
-                            email: newEmail
-                        });
-                        
-                        showNotification("Profil güncellendi!", "success");
-                        modal.remove();
-                        await loadUserData(currentUser);
-                    } catch (error) {
-                        let errorMessage = "Güncelleme hatası!";
-                        if(error.code === 'auth/requires-recent-login') {
-                            errorMessage = "E-posta değiştirmek için tekrar giriş yapmalısınız!";
-                        } else if(error.code === 'auth/email-already-in-use') {
-                            errorMessage = "Bu e-posta zaten kullanımda!";
-                        } else if(error.code === 'auth/invalid-email') {
-                            errorMessage = "Geçersiz e-posta adresi!";
-                        } else {
-                            errorMessage = error.message;
-                        }
-                        showNotification(errorMessage, "error");
-                    }
-                };
-                
-            } catch (error) {
-                showNotification("Profil yüklenemedi!", "error");
-            }
-        }
-
+        // Çıkış Yap
         window.logout = async () => {
             try {
                 await signOut(auth);
@@ -1034,23 +693,14 @@
             }
         }
 
-        window.resendVerification = async () => {
-            try {
-                const { sendEmailVerification } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
-                await sendEmailVerification(currentUser);
-                showNotification("Doğrulama e-postası gönderildi! E-postanızı kontrol edin.", "success");
-            } catch (error) {
-                showNotification("E-posta gönderilemedi: " + error.message, "error");
-            }
-        }
-
+        // Enter tuşu ile form gönderme
         document.addEventListener('keypress', (e) => {
             if(e.key === 'Enter' && window.location.hash.slice(1) === 'login') {
                 handleAuth();
             }
         });
 
-        initTheme();
+        // Sayfa yüklendiğinde route'u kontrol et
         handleRoute();
     </script>
 </body>
